@@ -7,6 +7,7 @@ export default function AdminPage() {
   const [selectedUser, setSelectedUser] = useState("");
   const [score, setScore] = useState("");
   const [comments, setComments] = useState("");
+  const [selectedUserProjLink, setSelectedUserProjLink] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -16,16 +17,18 @@ export default function AdminPage() {
     try {
       const response = await axios.post(
         "https://elabs-proj-eval-api.el.r.appspot.com/api/v1/proj/getEval/ui1"
-      ); // Replace with your API endpoint
+      );
       setUsers(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
   const handleUserSelect = (event) => {
-    setSelectedUser(event.target.value);
+    const selectedUid = event.target.value;
+    const selectedUser = users.find((user) => user.uid === selectedUid);
+    setSelectedUser(selectedUid);
+    setSelectedUserProjLink(selectedUser.projLink || "");
   };
 
   const handleSubmit = async () => {
@@ -37,14 +40,14 @@ export default function AdminPage() {
           score: score,
           comments: comments,
         }
-      ); // Replace with your API endpoint
+      );
       if (response.status === 200) {
-        // Remove the submitted user from the dropdown menu
         const updatedUsers = users.filter((user) => user.uid !== selectedUser);
         setUsers(updatedUsers);
         setSelectedUser("");
         setScore("");
         setComments("");
+        setSelectedUserProjLink("");
       }
     } catch (error) {
       console.error("Error submitting score and comments:", error);
@@ -97,6 +100,20 @@ export default function AdminPage() {
               onChange={(e) => setComments(e.target.value)}
               className="w-full text-black py-2 px-3 rounded-lg border focus:outline-none focus:border-yellow-500"
             />
+          </div>
+        )}
+
+        {selectedUser && selectedUserProjLink && (
+          <div className="mb-4">
+            <label className="block font-medium mb-2">Project Link:</label>
+            <a
+              href={selectedUserProjLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              {selectedUserProjLink}
+            </a>
           </div>
         )}
 
