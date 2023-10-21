@@ -16,7 +16,7 @@ export default function AdminPage() {
   const fetchUsers = async () => {
     try {
       const response = await axios.post(
-        "https://elabs-proj-eval-api.el.r.appspot.com/api/v1/proj/getEval/ui-session-3"
+        "https://elabs-proj-eval-api.el.r.appspot.com/api/v1/proj/getEval/ui-final"
       );
       setUsers(response.data);
     } catch (error) {
@@ -34,7 +34,7 @@ export default function AdminPage() {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        "https://elabs-proj-eval-api.el.r.appspot.com/api/v1/proj/evalProj/ui-session-3",
+        "https://elabs-proj-eval-api.el.r.appspot.com/api/v1/proj/evalProj/ui-final",
         {
           uid: selectedUser,
           score: score,
